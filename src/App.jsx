@@ -1,19 +1,15 @@
 import './App.css'
+import TaskBar from './components/TaskBar'
+import Icons from './components/Icons'
 
-// component is any function in JS that returns some kind of JSX code
-// props?/prompts? are parements basically
 function App() {
-
   return (
-    // fragment is an empty html tag acting as parent 
     <>
-      
-      <div>hello world</div>
-      
-      
+      <div className='text-red-800'> hello world</div>
+      <Icons></Icons>
+      <TaskBar> </TaskBar>
     </>
   )
-
 }
 
 export default App

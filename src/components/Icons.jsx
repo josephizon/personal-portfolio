@@ -1,10 +1,9 @@
 export default function Icons ({icon_name}) {
     return  (
         <>
-            <div className="static w-[20px] h-[20px] bg-white text-red-500">
+            <div className="w-15 h-15 m-2 bg-white text-red-500">
                 {icon_name}
             </div>
-        
         </>
     );
 }

@@ -1,16 +1,25 @@
+// NOTES TO SELF: 
+// Add another prop in Draggable which toggles the size of the window in a state format 
+// try changing this state based on passing a value from windowlayout to draggable then apps to windowlayout
+
 import React, { useRef, useState, useEffect } from 'react';
 
-const DraggableDiv = ({ children, dragHandleRef }) => {
+export default function DraggableDiv ({ children, dragHandleRef }) {
+  // Initilization
   const dragRef = useRef(null);
-  const [pos, setPos] = useState({ x: 500, y: 500 });
+  const [pos, setPos] = useState({ x: 400, y: 400 }); 
   const [size, setSize] = useState({ width: 240, height: 240 });
   const [dragging, setDragging] = useState(false);
   const [rel, setRel] = useState({ x: 0, y: 0 });
   const [resizing, setResizing] = useState(null); // null or direction string
 
-  // === Dragging ===
+  // Dragging Code
+  // useEffect allows for side effects to happen
+  // side effects as in when the [dependencies] change, then it runs 
+  // what's inside the array
   useEffect(() => {
     const handleMouseDown = (e) => {
+      // left click only
       if (e.button !== 0) return;
       const rect = dragRef.current.getBoundingClientRect();
       setDragging(true);
@@ -18,8 +27,8 @@ const DraggableDiv = ({ children, dragHandleRef }) => {
         x: e.pageX - rect.left,
         y: e.pageY - rect.top,
       });
-      e.stopPropagation();
-      e.preventDefault();
+      e.stopPropagation(); // prevent parent event handlers from happening 
+      e.preventDefault(); // prevent default events from happening (ex. clicking links)
     };
 
     const handle = dragHandleRef?.current;
@@ -27,6 +36,9 @@ const DraggableDiv = ({ children, dragHandleRef }) => {
       handle.addEventListener('mousedown', handleMouseDown);
     }
 
+    // clean-up function
+    // when not in use, automatically removes what's happening here
+    // runs before it gets removed or the component runs again
     return () => {
       if (handle) {
         handle.removeEventListener('mousedown', handleMouseDown);
@@ -34,11 +46,14 @@ const DraggableDiv = ({ children, dragHandleRef }) => {
     };
   }, [dragHandleRef]); // end of useEffect
 
+  // more events that are referenced as props
+  // event when mouse is not pressed
   const onMouseUp = () => {
     setDragging(false);
     setResizing(null);
   };
 
+  // event on mouse movement
   const onMouseMove = (e) => {
     if (dragging) {
       setPos({
@@ -81,6 +96,7 @@ const DraggableDiv = ({ children, dragHandleRef }) => {
     e.preventDefault();
   };
 
+  // event on resizing the div
   const startResizing = (dir) => (e) => {
     setResizing(dir);
     e.stopPropagation();
@@ -128,6 +144,7 @@ const DraggableDiv = ({ children, dragHandleRef }) => {
         />
       ))}
 
+      {/* transparent div that gets rendered when dragging or resizing */}
       {(dragging || resizing) && (
         <div
           onMouseMove={onMouseMove}
@@ -140,11 +157,10 @@ const DraggableDiv = ({ children, dragHandleRef }) => {
             width: '100vw',
             height: '100vh',
             zIndex: 9999,
+            // background: 'rgba(255, 0, 0, 0.2)', // debugging
           }}
         />
       )}
     </div>
   );
 };
-
-export default DraggableDiv;

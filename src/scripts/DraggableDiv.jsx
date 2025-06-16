@@ -1,10 +1,8 @@
 // NOTES TO SELF: 
-// Add another prop in Draggable which toggles the size of the window in a state format 
-// try changing this state based on passing a value from windowlayout to draggable then apps to windowlayout
 
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
-export default function DraggableDiv ({ children, dragHandleRef }) {
+export default function DraggableDiv ({ children, dragHandleRef, maximize}) {
   // Initilization
   const dragRef = useRef(null);
   const [pos, setPos] = useState({ x: 400, y: 400 }); 
@@ -13,7 +11,9 @@ export default function DraggableDiv ({ children, dragHandleRef }) {
   const [rel, setRel] = useState({ x: 0, y: 0 });
   const [resizing, setResizing] = useState(null); // null or direction string
 
-  // Dragging Code
+  const [previousState, setPreviousState] = useState(null);
+
+  // Dragging Code Hook
   // useEffect allows for side effects to happen
   // side effects as in when the [dependencies] change, then it runs 
   // what's inside the array
@@ -45,6 +45,20 @@ export default function DraggableDiv ({ children, dragHandleRef }) {
       }
     };
   }, [dragHandleRef]); // end of useEffect
+
+  // Maximize Code Hook
+  useEffect(() => {
+    if (maximize) {
+      setPreviousState({ pos, size });
+      setPos({ x: 0, y: 0 });
+      setSize({ width: window.innerWidth, height: window.innerHeight });
+    } 
+    // checks if prevsiousState exists 
+    else if (previousState) {
+      setPos(previousState.pos);
+      setSize(previousState.size);
+    }
+  }, [maximize]);
 
   // more events that are referenced as props
   // event when mouse is not pressed
@@ -103,6 +117,17 @@ export default function DraggableDiv ({ children, dragHandleRef }) {
     e.preventDefault();
   };
 
+  const resizeHandles = {
+        top: { top: 0, left: 0, width: '100%', height: '10px', cursor: 'n-resize' },
+        bottom: { bottom: 0, left: 0, width: '100%', height: '10px', cursor: 's-resize' },
+        left: { top: 0, left: 0, width: '10px', height: '100%', cursor: 'w-resize' },
+        right: { top: 0, right: 0, width: '10px', height: '100%', cursor: 'e-resize' },
+        'top-left': { top: 0, left: 0, width: '10px', height: '10px', cursor: 'nw-resize' },
+        'top-right': { top: 0, right: 0, width: '10px', height: '10px', cursor: 'ne-resize' },
+        'bottom-left': { bottom: 0, left: 0, width: '10px', height: '10px', cursor: 'sw-resize' },
+        'bottom-right': { bottom: 0, right: 0, width: '10px', height: '10px', cursor: 'se-resize' },
+  };
+
   return (
     <div
       ref={dragRef}
@@ -119,27 +144,15 @@ export default function DraggableDiv ({ children, dragHandleRef }) {
       {children}
 
       {/* Resize handles */}
-      {['top', 'right', 'bottom', 'left', 'top-left', 'top-right', 'bottom-left', 'bottom-right'].map((dir) => (
+
+      {Object.entries(resizeHandles).map(([dir, style]) => (
         <div
           key={dir}
           onMouseDown={startResizing(dir)}
           style={{
             position: 'absolute',
-            [dir.includes('top') ? 'top' : 'bottom']: 0,
-            [dir.includes('left') ? 'left' : dir.includes('right') ? 'right' : 'left']: dir.includes('left') ? 0 : dir.includes('right') ? 0 : '50%',
-            width: dir.includes('left') || dir.includes('right') ? '10px' : '100%',
-            height: dir.includes('top') || dir.includes('bottom') ? '10px' : '100%',
-            cursor: {
-              top: 'n-resize',
-              bottom: 's-resize',
-              left: 'w-resize',
-              right: 'e-resize',
-              'top-left': 'nw-resize',
-              'top-right': 'ne-resize',
-              'bottom-left': 'sw-resize',
-              'bottom-right': 'se-resize',
-            }[dir],
-            zIndex: 10
+            zIndex: 10,
+            ...style,
           }}
         />
       ))}

@@ -33,7 +33,7 @@ function App() {
       
       {/* Window Space div */}
       <div className='col-span-5 bg-yellow-500'> 
-        {windowState && <WindowLayout clickReference={handleClickClose} />}
+        {windowState && <WindowLayout clickClose={handleClickClose} />}
         
       </div>
 

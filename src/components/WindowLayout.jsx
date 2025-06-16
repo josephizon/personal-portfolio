@@ -1,23 +1,28 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import DraggableDiv from '../scripts/DraggableDiv';
 
-export default function WindowLayout({clickReference}) {
+export default function WindowLayout({clickClose}) {
   const headerRef = useRef(null);
+  const [isMaximized, setMaximize] = useState(false);
+
+  const clickMaximize = () => {
+    setMaximize((prev) => !prev); // toggle
+  };
 
   return (
-    <DraggableDiv dragHandleRef={headerRef}>
+    <DraggableDiv dragHandleRef={headerRef} maximize={isMaximized}>
       {/* main div: the whole white thing */}
       <div className="w-full h-full bg-white shadow-md overflow-hidden"> 
         <div className='grid grid-cols-[1fr_auto_auto]'> 
           <div
             ref={headerRef}
-            className="px-2 py-1 bg-gray-800 text-white cursor-move"
+            className="px-2 py-1 bg-gray-800 text-white cursor-grab"
           >
             Window Name
           </div>
 
-          <div onClick={clickReference} className="w-10 h-8 text-center content-center bg-gray-800 hover:bg-gray-600 transition-colors">&#xf2d1;</div>
-          <div onClick={clickReference} className="w-10 h-8 text-center content-center bg-gray-800 hover:bg-red-500 transition-colors">X</div>
+          <div onClick={clickMaximize} className="w-10 h-8 text-center content-center bg-gray-800 hover:bg-gray-600 transition-colors cursor-default">&#xf2d1;</div>
+          <div onClick={clickClose} className="w-10 h-8 text-center content-center bg-gray-800 hover:bg-red-500 transition-colors cursor-default">X</div>
         </div>
 
         <div className="p-2 text-black">

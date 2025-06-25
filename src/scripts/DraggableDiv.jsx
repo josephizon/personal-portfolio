@@ -5,8 +5,8 @@ import { useRef, useState, useEffect } from 'react';
 export default function DraggableDiv ({ children, dragHandleRef, maximize}) {
   // Initilization
   const dragRef = useRef(null);
-  const [pos, setPos] = useState({ x: 400, y: 400 }); 
-  const [size, setSize] = useState({ width: 240, height: 240 });
+  const [pos, setPos] = useState({ x: 400, y: 100 }); 
+  const [size, setSize] = useState({ width: 800, height: 500 });
   const [dragging, setDragging] = useState(false);
   const [rel, setRel] = useState({ x: 0, y: 0 });
   const [resizing, setResizing] = useState(null); // null or direction string
@@ -138,7 +138,7 @@ export default function DraggableDiv ({ children, dragHandleRef, maximize}) {
         width: size.width,
         height: size.height,
         background: 'white',
-        boxShadow: '0 0 5px rgba(0,0,0,0.2)',
+        boxShadow: '10px 10px 0 rgba(0,0,0,1)',
       }}
     >
       {children}

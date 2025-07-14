@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import './App.css'
+import LoginScreen from './components/LoginScreen';
 import TaskBar from './components/TaskBar'
 import Icons from './components/Icons'
 import WindowResume from './components/WindowResume'
@@ -23,6 +24,8 @@ function App() {
 
   return (
     <>
+    <LoginScreen> </LoginScreen>
+
     <div className='grid grid-cols-6 gap-4 h-screen'> 
       {/* Icons Grid */}
       <div className="grid grid-cols-2 gap-4 h-fit bg-yellow-500"> 
@@ -38,7 +41,8 @@ function App() {
       </div>
 
     </div>
-      <TaskBar> </TaskBar>
+    
+    <TaskBar> </TaskBar>
     </>
   )
 }

@@ -51,7 +51,7 @@ export default function DraggableDiv ({ children, dragHandleRef, maximize}) {
     if (maximize) {
       setPreviousState({ pos, size });
       setPos({ x: 0, y: 0 });
-      setSize({ width: window.innerWidth, height: window.innerHeight });
+      setSize({ width: window.innerWidth-9, height: "95vh" });
     } 
     // checks if prevsiousState exists 
     else if (previousState) {

@@ -12,8 +12,9 @@ import WindowResume from './components/WindowResume'
 function App() {
   // initialization
   const [windowState, isWindowOpen] = useState(false);
+  const [loginState, isLoginOpen] = useState(true);
 
-  // onclick handler 
+  // onclick handlers
   const handleClickOpen = () => {
     isWindowOpen(true); // this updates the state
   };
@@ -22,9 +23,14 @@ function App() {
     isWindowOpen(false); // this updates the state
   };
 
+  const handleClickLogin = () => {
+    isLoginOpen(false); // this updates the state
+  };
+
   return (
     <>
-    <LoginScreen> </LoginScreen>
+    {/* close LoginScreen component when logged in */}
+    {loginState && <LoginScreen clickClose={handleClickLogin} />}
 
     <div className='grid grid-cols-6 gap-4 h-screen'> 
       {/* Icons Grid */}
@@ -37,6 +43,7 @@ function App() {
       {/* Window Space div */}
       <div className='col-span-5 bg-yellow-500'> 
         {windowState && <WindowResume clickClose={handleClickClose} />}
+
         
       </div>
 
